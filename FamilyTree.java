@@ -1,31 +1,31 @@
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class FamilyTree {
-    private Map<String, Person> members;
+public class FamilyTree implements Serializable {
+    private List<Person> persons;
 
     public FamilyTree() {
-        this.members = new HashMap<>();
+        this.persons = new ArrayList<>();
     }
 
     public void addPerson(Person person) {
-        this.members.put(person.getFullName(), person);
-    }
-
-    public Person getPerson(String fullName) {
-        return this.members.get(fullName);
+        persons.add(person);
     }
 
     public List<Person> getChildren(String fullName) {
-        Person person = this.members.get(fullName);
-        if (person != null) {
-            return person.getChildren();
+        List<Person> children = new ArrayList<>();
+        for (Person person : persons) {
+            if (person.getParents().stream().anyMatch(p -> p.getFullName().equals(fullName))) {
+                children.add(person);
+            }
         }
-        return new ArrayList<>();
+        return children;
     }
 }
+
+
+
 
 
 
