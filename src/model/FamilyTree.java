@@ -7,38 +7,38 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.Collections;
 
-public class FamilyTree implements Serializable, Iterable<Person> {
-    private List<Person> persons;
+public class FamilyTree<T extends Person> implements Serializable, Iterable<T> {
+    private List<T> members;
 
     public FamilyTree() {
-        this.persons = new ArrayList<>();
+        this.members = new ArrayList<>();
     }
 
-    public void addPerson(Person person) {
-        persons.add(person);
+    public void addMember(T member) {
+        members.add(member);
     }
 
-    public List<Person> getChildren(String fullName) {
-        List<Person> children = new ArrayList<>();
-        for (Person person : persons) {
-            if (person.getParents().stream().anyMatch(p -> p.getFullName().equals(fullName))) {
-                children.add(person);
+    public List<T> getChildren(String fullName) {
+        List<T> children = new ArrayList<>();
+        for (T member : members) {
+            if (member.getParents().stream().anyMatch(p -> p.getFullName().equals(fullName))) {
+                children.add(member);
             }
         }
         return children;
     }
 
     public void sortByName() {
-        Collections.sort(persons, Comparator.comparing(Person::getFullName));
+        Collections.sort(members, Comparator.comparing(Person::getFullName));
     }
 
     public void sortByBirthDate() {
-        Collections.sort(persons, Comparator.comparing(Person::getBirthDate));
+        Collections.sort(members, Comparator.comparing(Person::getBirthDate));
     }
 
     @Override
-    public Iterator<Person> iterator() {
-        return persons.iterator();
+    public Iterator<T> iterator() {
+        return members.iterator();
     }
 }
 

@@ -44,7 +44,14 @@ public class Person implements Serializable {
     public List<Person> getChildren() {
         return children;
     }
+
+    @Override
+    public String toString() {
+        return getFullName() + " - " + birthDate + " - " + gender;
+    }
 }
+
+
 
 
 
