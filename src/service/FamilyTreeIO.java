@@ -1,20 +1,20 @@
+package service;
+
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import model.FamilyTree;
 
 public class FamilyTreeIO implements FamilyTreeStorage {
     @Override
-    public void saveFamilyTree(FamilyTree familyTree, String filePath) throws IOException {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath));
-             OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {
+    public void saveFamilyTree(FamilyTree<?> familyTree, String filePath) throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
             out.writeObject(familyTree);
         }
     }
 
     @Override
-    public FamilyTree loadFamilyTree(String filePath) throws IOException, ClassNotFoundException {
+    public FamilyTree<?> loadFamilyTree(String filePath) throws IOException, ClassNotFoundException {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (FamilyTree) in.readObject();
+            return (FamilyTree<?>) in.readObject();
         }
     }
 }
-
