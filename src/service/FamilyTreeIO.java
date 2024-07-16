@@ -1,7 +1,8 @@
 package service;
 
+import model.*;
+
 import java.io.*;
-import model.FamilyTree;
 
 public class FamilyTreeIO implements FamilyTreeStorage {
     @Override
@@ -18,3 +19,4 @@ public class FamilyTreeIO implements FamilyTreeStorage {
         }
     }
 }
+

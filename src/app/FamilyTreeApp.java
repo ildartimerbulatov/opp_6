@@ -15,9 +15,16 @@ public class FamilyTreeApp {
     private Scanner scanner;
 
     public FamilyTreeApp() {
-        this.familyTree = new FamilyTree<>();
         this.storage = new FamilyTreeIO();
         this.scanner = new Scanner(System.in);
+        // Загрузка данных при старте программы
+        try {
+            familyTree = loadTypedFamilyTree("family_tree.dat");
+            System.out.println("Данные успешно загружены из файла family_tree.dat");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Ошибка при загрузке данных: " + e.getMessage());
+            familyTree = new FamilyTree<>();
+        }
     }
 
     public void start() {
@@ -54,6 +61,13 @@ public class FamilyTreeApp {
                 default:
                     System.out.println("Неверный выбор. Пожалуйста, попробуйте снова.");
             }
+        }
+        // Сохранение данных при выходе из программы
+        try {
+            saveTypedFamilyTree("family_tree.dat");
+            System.out.println("Данные успешно сохранены в файл family_tree.dat");
+        } catch (IOException e) {
+            System.err.println("Ошибка при сохранении данных: " + e.getMessage());
         }
     }
 
@@ -97,22 +111,18 @@ public class FamilyTreeApp {
     }
 
     private void saveTree() {
-        System.out.print("Введите путь к файлу для сохранения: ");
-        String filePath = scanner.nextLine();
         try {
-            storage.saveFamilyTree(familyTree, filePath);
-            System.out.println("Семейное дерево сохранено в " + filePath);
+            saveTypedFamilyTree("family_tree.dat");
+            System.out.println("Семейное дерево сохранено в family_tree.dat");
         } catch (IOException e) {
             System.err.println("Ошибка при сохранении семейного дерева: " + e.getMessage());
         }
     }
 
     private void loadTree() {
-        System.out.print("Введите путь к файлу для загрузки: ");
-        String filePath = scanner.nextLine();
         try {
-            familyTree = loadTypedFamilyTree(filePath);
-            System.out.println("Семейное дерево загружено из " + filePath);
+            familyTree = loadTypedFamilyTree("family_tree.dat");
+            System.out.println("Семейное дерево загружено из family_tree.dat");
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Ошибка при загрузке семейного дерева: " + e.getMessage());
         }
@@ -121,6 +131,10 @@ public class FamilyTreeApp {
     @SuppressWarnings("unchecked")
     private FamilyTree<Person> loadTypedFamilyTree(String filePath) throws IOException, ClassNotFoundException {
         return (FamilyTree<Person>) storage.loadFamilyTree(filePath);
+    }
+
+    private void saveTypedFamilyTree(String filePath) throws IOException {
+        storage.saveFamilyTree(familyTree, filePath);
     }
 
     private void displayMembers() {
