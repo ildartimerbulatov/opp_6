@@ -32,7 +32,7 @@ public class FamilyTreeApp {
         while (running) {
             showMenu();
             int choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+            scanner.nextLine(); // Используем новую строку
             switch (choice) {
                 case 1:
                     addMember();
@@ -65,7 +65,7 @@ public class FamilyTreeApp {
         // Сохранение данных при выходе из программы
         try {
             saveTypedFamilyTree("family_tree.dat");
-            System.out.println("Данные успешно сохранены в файл family_tree.dat");
+            System.out.println("Данные успешно сохранены в файле family_tree.dat");
         } catch (IOException e) {
             System.err.println("Ошибка при сохранении данных: " + e.getMessage());
         }
@@ -80,10 +80,14 @@ public class FamilyTreeApp {
         System.out.println("6. Сортировать членов семьи по имени");
         System.out.println("7. Сортировать членов семьи по дате рождения");
         System.out.println("0. Выход");
-        System.out.print("Введите ваш выбор: ");
+        System.out.print("Сделайте ваш выбор: ");
     }
 
     private void addMember() {
+        System.out.print("Введите тип члена семьи (1 - Человек, 2 - Собака): ");
+        int type = scanner.nextInt();
+        scanner.nextLine(); // Используем новую строку
+
         System.out.print("Введите имя: ");
         String firstName = scanner.nextLine();
         System.out.print("Введите отчество: ");
@@ -96,18 +100,26 @@ public class FamilyTreeApp {
         System.out.print("Введите год рождения: ");
         int birthYear = scanner.nextInt();
         System.out.print("Введите месяц рождения (1-12): ");
-        int birthMonth = scanner.nextInt() - 1; // Calendar months are 0-based
+        int birthMonth = scanner.nextInt() - 1; // Календарные месяцы отсчитываются от 0
         System.out.print("Введите день рождения: ");
         int birthDay = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+        scanner.nextLine(); // Используем новую строку
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(birthYear, birthMonth, birthDay);
         Date birthDate = calendar.getTime();
 
-        Person person = new Person(firstName, middleName, lastName, birthDate, gender);
-        familyTree.addMember(person);
-        System.out.println("Член семьи добавлен.");
+        if (type == 1) { // Человек
+            Person person = new Person(firstName, middleName, lastName, birthDate, gender);
+            familyTree.addMember(person);
+            System.out.println("Член семьи добавлен.");
+        } else if (type == 2) { // Собака
+            Dog dog = new Dog(firstName, middleName, lastName, birthDate, gender);
+            familyTree.addMember(dog);
+            System.out.println("Собака добавлена.");
+        } else {
+            System.out.println("Неверный тип члена семьи.");
+        }
     }
 
     private void saveTree() {
