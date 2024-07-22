@@ -47,6 +47,20 @@ public class Person implements Serializable {
         return parents;
     }
 
+    public void setParents(List<Person> parents) {
+        this.parents = parents;
+    }
+
+    public void addParent(Person parent) {
+        if (!parents.contains(parent)) {
+            parents.add(parent);
+        }
+    }
+
+    public void removeParent(Person parent) {
+        parents.remove(parent);
+    }
+
     public List<Person> getChildren() {
         return children;
     }

@@ -226,6 +226,34 @@ public class FamilyTreePresenter {
                     view.displayMessage("Неверное значение для пола. Пожалуйста, используйте MALE или FEMALE.");
                 }
             }
+
+            // Новый код для редактирования родителей
+            view.displayMessage("Введите полное имя нового родителя (или оставьте пустым, чтобы не изменять): ");
+            String newParentName = view.getUserInput();
+            if (!newParentName.isEmpty()) {
+                Person newParent = familyTree.findMemberByName(newParentName);
+                if (newParent != null) {
+                    person.addParent(newParent);
+                    newParent.addChild(person);
+                    view.displayMessage("Родитель успешно добавлен.");
+                } else {
+                    view.displayMessage("Родитель с таким именем не найден.");
+                }
+            }
+
+            view.displayMessage("Введите полное имя родителя для удаления (или оставьте пустым, чтобы не изменять): ");
+            String removeParentName = view.getUserInput();
+            if (!removeParentName.isEmpty()) {
+                Person removeParent = familyTree.findMemberByName(removeParentName);
+                if (removeParent != null) {
+                    person.removeParent(removeParent);
+                    removeParent.removeChild(person);
+                    view.displayMessage("Родитель успешно удален.");
+                } else {
+                    view.displayMessage("Родитель с таким именем не найден.");
+                }
+            }
+
             view.displayMessage("Член семьи обновлен.");
         } else {
             view.displayMessage("Член семьи с таким именем не найден.");
