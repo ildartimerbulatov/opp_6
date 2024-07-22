@@ -4,6 +4,8 @@ import model.*;
 import service.*;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -84,42 +86,56 @@ public class FamilyTreeApp {
     }
 
     private void addMember() {
-        System.out.print("Введите тип члена семьи (1 - Человек, 2 - Собака): ");
-        int type = scanner.nextInt();
-        scanner.nextLine(); // Используем новую строку
+    System.out.print("Введите тип члена семьи (1 - Человек, 2 - Собака): ");
+    int type = scanner.nextInt();
+    scanner.nextLine(); // Используем новую строку
 
-        System.out.print("Введите имя: ");
-        String firstName = scanner.nextLine();
+    System.out.print("Введите имя: ");
+    String firstName = scanner.nextLine();
+
+    String middleName = null; // Отчество не требуется для собак
+    String lastName = null; // Фамилия не требуется для собак
+
+    if (type == 1) { // Человек
         System.out.print("Введите отчество: ");
-        String middleName = scanner.nextLine();
+        middleName = scanner.nextLine();
         System.out.print("Введите фамилию: ");
-        String lastName = scanner.nextLine();
-        System.out.print("Введите пол (MALE/FEMALE): ");
-        String genderStr = scanner.nextLine();
-        Gender gender = Gender.valueOf(genderStr.toUpperCase());
-        System.out.print("Введите год рождения: ");
-        int birthYear = scanner.nextInt();
-        System.out.print("Введите месяц рождения (1-12): ");
-        int birthMonth = scanner.nextInt() - 1; // Календарные месяцы отсчитываются от 0
-        System.out.print("Введите день рождения: ");
-        int birthDay = scanner.nextInt();
-        scanner.nextLine(); // Используем новую строку
+        lastName = scanner.nextLine();
+    }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(birthYear, birthMonth, birthDay);
-        Date birthDate = calendar.getTime();
+    System.out.println("Введите дату рождения в формате ГГГГ-ММ-ДД (например, 1990-09-08): ");
+    String birthDateString = scanner.nextLine();
+    Date birthDate = null;
 
-        if (type == 1) { // Человек
-            Person person = new Person(firstName, middleName, lastName, birthDate, gender);
-            familyTree.addMember(person);
-            System.out.println("Член семьи добавлен.");
-        } else if (type == 2) { // Собака
-            Dog dog = new Dog(firstName, middleName, lastName, birthDate, gender);
-            familyTree.addMember(dog);
-            System.out.println("Собака добавлена.");
-        } else {
-            System.out.println("Неверный тип члена семьи.");
-        }
+    // Парасинг даты
+    try {
+        birthDate = new SimpleDateFormat("yyyy-MM-dd").parse(birthDateString);
+    } catch (ParseException e) {
+        System.err.println("Неверный формат даты. Пожалуйста, используйте формат ГГГГ-ММ-ДД.");
+        return;
+    }
+
+    Gender gender = null;
+    System.out.print("Введите пол (MALE/FEMALE): ");
+    String genderStr = scanner.nextLine();
+    try {
+        gender = Gender.valueOf(genderStr.toUpperCase());
+    } catch (IllegalArgumentException e) {
+        System.err.println("Неверное значение для пола. Пожалуйста, используйте MALE или FEMALE.");
+        return;
+    }
+
+    if (type == 1) { // Человек
+        Person person = new Person(firstName, middleName, lastName, birthDate, gender);
+        familyTree.addMember(person);
+        System.out.println("Член семьи добавлен.");
+    } else if (type == 2) { // Собака
+        Dog dog = new Dog(firstName, middleName, lastName, birthDate, gender);
+        familyTree.addMember(dog);
+        System.out.println("Собака добавлена.");
+    } else {
+        System.out.println("Неверный тип члена семьи.");
+    }
     }
 
     private void saveTree() {
