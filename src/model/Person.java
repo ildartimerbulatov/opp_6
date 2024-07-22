@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Person implements Serializable {
+    private static final long serialVersionUID = 4219696389020110797L;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -29,8 +30,13 @@ public class Person implements Serializable {
         child.parents.add(this);
     }
 
+    public void removeChild(Person child) {
+        children.remove(child);
+        child.parents.remove(this);
+    }
+
     public String getFullName() {
-        return firstName + " " + middleName + " " + lastName;
+        return firstName + " " + (middleName != null ? middleName + " " : "") + lastName;
     }
 
     public Date getBirthDate() {
@@ -45,9 +51,43 @@ public class Person implements Serializable {
         return children;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     @Override
     public String toString() {
-        return getFullName() + " - " + birthDate + " - " + gender;
+        StringBuilder sb = new StringBuilder();
+        sb.append(getFullName()).append(" - ").append(birthDate).append(" - ").append(gender);
+        if (!parents.isEmpty()) {
+            sb.append(" - Родители: ");
+            for (Person parent : parents) {
+                sb.append(parent.getFullName()).append(" ");
+            }
+        }
+        if (!children.isEmpty()) {
+            sb.append(" - Дети: ");
+            for (Person child : children) {
+                sb.append(child.getFullName()).append(" ");
+            }
+        }
+        return sb.toString();
     }
 }
 
