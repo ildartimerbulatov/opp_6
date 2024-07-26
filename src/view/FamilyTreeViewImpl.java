@@ -5,7 +5,6 @@ import presenter.FamilyTreePresenter;
 import java.util.Scanner;
 
 public class FamilyTreeViewImpl implements FamilyTreeView {
-    private FamilyTreePresenter presenter;
     private Scanner scanner;
 
     public FamilyTreeViewImpl() {
@@ -14,7 +13,6 @@ public class FamilyTreeViewImpl implements FamilyTreeView {
 
     @Override
     public void setPresenter(FamilyTreePresenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override
@@ -39,5 +37,11 @@ public class FamilyTreeViewImpl implements FamilyTreeView {
     @Override
     public String getUserInput() {
         return scanner.nextLine();
+    }
+
+    @Override
+    public void displayMembers(String string) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'displayMembers'");
     }
 }

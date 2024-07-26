@@ -7,4 +7,5 @@ public interface FamilyTreeView {
     void showMenu();
     void displayMessage(String message);
     String getUserInput();
+    void displayMembers(String string);
 }
