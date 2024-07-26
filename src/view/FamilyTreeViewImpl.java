@@ -13,6 +13,7 @@ public class FamilyTreeViewImpl implements FamilyTreeView {
 
     @Override
     public void setPresenter(FamilyTreePresenter presenter) {
+        // Можно оставить пустым, если не требуется
     }
 
     @Override
@@ -40,8 +41,7 @@ public class FamilyTreeViewImpl implements FamilyTreeView {
     }
 
     @Override
-    public void displayMembers(String string) {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'displayMembers'");
+    public void displayMembers(String members) {
+        System.out.println(members);
     }
 }
