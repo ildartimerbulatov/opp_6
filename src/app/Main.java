@@ -4,8 +4,8 @@ import model.FamilyTree;
 import model.Person;
 import presenter.FamilyTreePresenter;
 import service.FamilyTreeIO;
-import service.FamilyTreeStorage;
 import service.FamilyTreeService;
+import service.FamilyTreeStorage;
 import view.FamilyTreeViewImpl;
 
 public class Main {

@@ -104,112 +104,127 @@ public class FamilyTreePresenter {
 
         view.displayMessage("Введите полное имя одного из родителей (или оставьте пустым, если не известно): ");
         String parentFullName = view.getUserInput();
-
         if (!parentFullName.isEmpty()) {
-            Person parent = service.getFamilyTree().findMemberByName(parentFullName);
+            Person parent = service.findMemberByName(parentFullName);
             if (parent != null) {
                 parent.addChild(person);
-                view.displayMessage("Родитель добавлен.");
             } else {
-                view.displayMessage("Родитель с таким именем не найден.");
+                view.displayMessage("Родитель с указанным именем не найден.");
             }
         }
 
         service.addMember(person);
-        view.displayMessage("Член семьи добавлен.");
+        view.displayMessage("Член семьи добавлен: " + person);
     }
 
     private void saveTree() {
+        view.displayMessage("Введите имя файла для сохранения: ");
+        String fileName = view.getUserInput();
         try {
-            service.saveFamilyTree("family_tree.dat");
-            view.displayMessage("Семейное дерево сохранено в family_tree.dat");
+            service.saveFamilyTree(fileName);
+            view.displayMessage("Данные успешно сохранены в файле " + fileName);
         } catch (IOException e) {
-            view.displayMessage("Ошибка при сохранении семейного дерева: " + e.getMessage());
+            view.displayMessage("Ошибка при сохранении данных: " + e.getMessage());
         }
     }
 
     private void loadTree() {
+        view.displayMessage("Введите имя файла для загрузки (или нажмите Enter для загрузки по умолчанию): ");
+        String fileName = view.getUserInput();
+        if (fileName.isEmpty()) {
+            fileName = "family_tree.dat";
+        }
         try {
-            service.loadFamilyTree("family_tree.dat");
-            view.displayMessage("Семейное дерево загружено из family_tree.dat");
+            service.loadFamilyTree(fileName);
+            view.displayMessage("Данные успешно загружены из файла " + fileName);
         } catch (IOException | ClassNotFoundException e) {
-            view.displayMessage("Ошибка при загрузке семейного дерева: " + e.getMessage());
+            view.displayMessage("Ошибка при загрузке данных: " + e.getMessage());
         }
     }
 
     private void displayMembers() {
-        StringBuilder sb = new StringBuilder();
-        for (Person person : service.getFamilyTree()) {
-            sb.append(person).append("\n");
+        List<Person> members = service.getAllMembers();
+        if (members.isEmpty()) {
+            view.displayMessage("Список членов семьи пуст.");
+        } else {
+            view.displayMessage("Члены семьи:");
+            for (Person member : members) {
+                view.displayMessage(member.toString());
+            }
         }
-        view.displayMembers(sb.toString());
     }
 
     private void findChildren() {
-        view.displayMessage("Введите полное имя родителя: ");
-        String fullName = view.getUserInput();
-        List<Person> children = service.getFamilyTree().getChildren(fullName);
-        StringBuilder sb = new StringBuilder("Дети ").append(fullName).append(":\n");
-        for (Person child : children) {
-            sb.append(child.getFullName()).append("\n");
+        view.displayMessage("Введите имя родителя для поиска детей: ");
+        String parentName = view.getUserInput();
+        List<Person> children = service.getChildren(parentName);
+        if (children.isEmpty()) {
+            view.displayMessage("Дети для указанного родителя не найдены.");
+        } else {
+            view.displayMessage("Дети:");
+            for (Person child : children) {
+                view.displayMessage(child.toString());
+            }
         }
-        view.displayMembers(sb.toString());
     }
 
     private void sortByName() {
-        service.getFamilyTree().sortByName();
-        view.displayMessage("Члены семьи отсортированы по имени.");
+        service.sortByName();
+        view.displayMessage("Список членов семьи отсортирован по имени.");
     }
 
     private void sortByBirthDate() {
-        service.getFamilyTree().sortByBirthDate();
-        view.displayMessage("Члены семьи отсортированы по дате рождения.");
+        service.sortByBirthDate();
+        view.displayMessage("Список членов семьи отсортирован по дате рождения.");
     }
 
     private void findAndEditMember() {
-        view.displayMessage("Введите полное имя члена семьи для редактирования: ");
-        String fullName = view.getUserInput();
-        Person person = service.getFamilyTree().findMemberByName(fullName);
-        if (person != null) {
-            view.displayMessage("Редактирование члена семьи: " + person.getFullName());
-            view.displayMessage("Введите новое имя (или оставьте пустым, чтобы не изменять): ");
-            String newFirstName = view.getUserInput();
-            if (!newFirstName.isEmpty()) {
-                person.setFirstName(newFirstName);
-            }
-            view.displayMessage("Введите новое отчество (или оставьте пустым, чтобы не изменять): ");
-            String newMiddleName = view.getUserInput();
-            if (!newMiddleName.isEmpty()) {
-                person.setMiddleName(newMiddleName);
-            }
-            view.displayMessage("Введите новую фамилию (или оставьте пустым, чтобы не изменять): ");
-            String newLastName = view.getUserInput();
-            if (!newLastName.isEmpty()) {
-                person.setLastName(newLastName);
-            }
-            view.displayMessage("Введите новую дату рождения в формате ГГГГ-ММ-ДД (или оставьте пустым, чтобы не изменять): ");
-            String newBirthDateString = view.getUserInput();
-            if (!newBirthDateString.isEmpty()) {
+        view.displayMessage("Введите имя члена семьи для поиска: ");
+        String partialName = view.getUserInput();
+        Person person = service.findMemberByName(partialName);
+        if (person == null) {
+            view.displayMessage("Член семьи с указанным именем не найден.");
+            return;
+        }
+        view.displayMessage("Найден член семьи: " + person);
+        view.displayMessage("Вы хотите изменить его данные? (yes/no)");
+        String answer = view.getUserInput().toLowerCase();
+        if (answer.equals("yes") || answer.equals("y")) {
+            view.displayMessage("Введите новое имя (оставьте пустым, чтобы не менять): ");
+            String firstName = view.getUserInput();
+            if (!firstName.isEmpty()) person.setFirstName(firstName);
+
+            view.displayMessage("Введите новое отчество (оставьте пустым, чтобы не менять): ");
+            String middleName = view.getUserInput();
+            if (!middleName.isEmpty()) person.setMiddleName(middleName);
+
+            view.displayMessage("Введите новую фамилию (оставьте пустым, чтобы не менять): ");
+            String lastName = view.getUserInput();
+            if (!lastName.isEmpty()) person.setLastName(lastName);
+
+            view.displayMessage("Введите новую дату рождения (оставьте пустым, чтобы не менять): ");
+            String birthDateString = view.getUserInput();
+            if (!birthDateString.isEmpty()) {
                 try {
-                    Date newBirthDate = new SimpleDateFormat("yyyy-MM-dd").parse(newBirthDateString);
-                    person.setBirthDate(newBirthDate);
+                    Date birthDate = new SimpleDateFormat("yyyy-MM-dd").parse(birthDateString);
+                    person.setBirthDate(birthDate);
                 } catch (ParseException e) {
-                    view.displayMessage("Неверный формат даты. Пожалуйста, используйте формат ГГГГ-ММ-ДД.");
+                    view.displayMessage("Неверный формат даты. Данные не изменены.");
                 }
             }
-            view.displayMessage("Введите новый пол (MALE/FEMALE) (или оставьте пустым, чтобы не изменять): ");
-            String newGenderStr = view.getUserInput();
-            if (!newGenderStr.isEmpty()) {
+
+            view.displayMessage("Введите новый пол (MALE/FEMALE, оставьте пустым, чтобы не менять): ");
+            String genderStr = view.getUserInput();
+            if (!genderStr.isEmpty()) {
                 try {
-                    Gender newGender = Gender.valueOf(newGenderStr.toUpperCase());
-                    person.setGender(newGender);
+                    Gender gender = Gender.valueOf(genderStr.toUpperCase());
+                    person.setGender(gender);
                 } catch (IllegalArgumentException e) {
-                    view.displayMessage("Неверное значение для пола. Пожалуйста, используйте MALE или FEMALE.");
+                    view.displayMessage("Неверное значение для пола. Данные не изменены.");
                 }
             }
-            view.displayMessage("Член семьи успешно обновлен.");
-        } else {
-            view.displayMessage("Член семьи с таким именем не найден.");
+
+            view.displayMessage("Данные обновлены: " + person);
         }
     }
 }

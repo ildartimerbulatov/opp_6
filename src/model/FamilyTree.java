@@ -52,13 +52,9 @@ public class FamilyTree<T extends Person> implements Serializable, Iterable<T> {
         }
         return null;
     }
-  
+
+    public List<Person> getMembers() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getMembers'");
+    }
 }
-
-
-
-
-
-
-
-

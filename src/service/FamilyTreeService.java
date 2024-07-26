@@ -4,6 +4,7 @@ import model.FamilyTree;
 import model.Person;
 
 import java.io.IOException;
+import java.util.List;
 
 public class FamilyTreeService {
     private FamilyTree<Person> familyTree;
@@ -14,19 +15,36 @@ public class FamilyTreeService {
         this.storage = storage;
     }
 
-    public void saveFamilyTree(String filePath) throws IOException {
-        storage.saveFamilyTree(familyTree, filePath);
-    }
-
-    public void loadFamilyTree(String filePath) throws IOException, ClassNotFoundException {
-        this.familyTree = (FamilyTree<Person>) storage.loadFamilyTree(filePath);
-    }
-
-    public FamilyTree<Person> getFamilyTree() {
-        return familyTree;
-    }
-
     public void addMember(Person person) {
         familyTree.addMember(person);
+    }
+
+    public List<Person> getAllMembers() {
+        return (List<Person>) familyTree.getMembers();
+    }
+
+    public List<Person> getChildren(String parentName) {
+        return familyTree.getChildren(parentName);
+    }
+
+    public void sortByName() {
+        familyTree.sortByName();
+    }
+
+    public void sortByBirthDate() {
+        familyTree.sortByBirthDate();
+    }
+
+    public Person findMemberByName(String name) {
+        return familyTree.findMemberByName(name);
+    }
+
+    public void saveFamilyTree(String fileName) throws IOException {
+        storage.saveFamilyTree(familyTree, fileName);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void loadFamilyTree(String fileName) throws IOException, ClassNotFoundException {
+        this.familyTree = (FamilyTree<Person>) storage.loadFamilyTree(fileName);
     }
 }

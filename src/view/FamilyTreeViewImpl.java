@@ -13,17 +13,22 @@ public class FamilyTreeViewImpl implements FamilyTreeView {
     }
 
     @Override
+    public void setPresenter(FamilyTreePresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
     public void showMenu() {
         System.out.println("1. Добавить члена семьи");
-        System.out.println("2. Сохранить дерево");
-        System.out.println("3. Загрузить дерево");
+        System.out.println("2. Сохранить семейное дерево");
+        System.out.println("3. Загрузить семейное дерево");
         System.out.println("4. Показать всех членов семьи");
-        System.out.println("5. Найти детей по имени");
-        System.out.println("6. Сортировать членов семьи по имени");
-        System.out.println("7. Сортировать членов семьи по дате рождения");
-        System.out.println("8. Найти и редактировать члена семьи");
+        System.out.println("5. Найти детей");
+        System.out.println("6. Отсортировать по имени");
+        System.out.println("7. Отсортировать по дате рождения");
+        System.out.println("8. Найти и изменить члена семьи");
         System.out.println("0. Выход");
-        System.out.print("Сделайте ваш выбор: ");
+        System.out.print("Выберите действие: ");
     }
 
     @Override
@@ -32,18 +37,7 @@ public class FamilyTreeViewImpl implements FamilyTreeView {
     }
 
     @Override
-    public void displayMembers(String members) {
-        System.out.println(members);
-    }
-
-    @Override
     public String getUserInput() {
         return scanner.nextLine();
     }
-
-    @Override
-    public void setPresenter(FamilyTreePresenter presenter) {
-        this.presenter = presenter;
-    }
 }
-

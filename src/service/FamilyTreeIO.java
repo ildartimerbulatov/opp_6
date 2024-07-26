@@ -1,22 +1,22 @@
 package service;
 
-import model.*;
+import model.FamilyTree;
 
 import java.io.*;
 
 public class FamilyTreeIO implements FamilyTreeStorage {
+
     @Override
-    public void saveFamilyTree(FamilyTree<?> familyTree, String filePath) throws IOException {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            out.writeObject(familyTree);
+    public void saveFamilyTree(FamilyTree<?> familyTree, String fileName) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            oos.writeObject(familyTree);
         }
     }
 
     @Override
-    public FamilyTree<?> loadFamilyTree(String filePath) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (FamilyTree<?>) in.readObject();
+    public FamilyTree<?> loadFamilyTree(String fileName) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
+            return (FamilyTree<?>) ois.readObject();
         }
     }
 }
-
